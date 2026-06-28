@@ -1,12 +1,13 @@
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import UserTable from "../components/UserTable";
+import MobileUserList from "../components/MobileUserList";
 import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
+import EmptyState from "../components/EmptyState";
 import UserForm from "../components/UserForm";
 import DeleteDialog from "../components/DeleteDialog";
-import EmptyState from "../components/EmptyState";
 
 import toast from "react-hot-toast";
 
@@ -26,6 +27,12 @@ function Dashboard() {
     deleteUser,
 
     clearFilters,
+
+    isFormOpen,
+    setIsFormOpen,
+
+    editingUser,
+    setEditingUser,
 
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
@@ -52,13 +59,26 @@ function Dashboard() {
     setPageSize,
 
     totalPages,
-
-    isFormOpen,
-    setIsFormOpen,
-
-    editingUser,
-    setEditingUser,
   } = useUsers();
+
+  function handleEdit(user) {
+    setEditingUser(user);
+    setIsFormOpen(true);
+  }
+
+  function handleDelete(user) {
+    setSelectedUser(user);
+    setIsDeleteDialogOpen(true);
+  }
+
+  function handleDeleteConfirm() {
+    deleteUser(selectedUser.id);
+
+    toast.success("User deleted successfully");
+
+    setIsDeleteDialogOpen(false);
+    setSelectedUser(null);
+  }
 
   return (
     <main className="min-h-screen bg-slate-100 py-10">
@@ -94,16 +114,16 @@ function Dashboard() {
                 <EmptyState onClearFilters={clearFilters} />
               ) : (
                 <>
+                  <MobileUserList
+                    users={paginatedUsers}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+
                   <UserTable
                     users={paginatedUsers}
-                    onEdit={(user) => {
-                      setEditingUser(user);
-                      setIsFormOpen(true);
-                    }}
-                    onDelete={(user) => {
-                      setSelectedUser(user);
-                      setIsDeleteDialogOpen(true);
-                    }}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
                   />
 
                   <Pagination
@@ -131,14 +151,7 @@ function Dashboard() {
                   setIsDeleteDialogOpen(false);
                   setSelectedUser(null);
                 }}
-                onConfirm={() => {
-                  deleteUser(selectedUser.id);
-
-                  toast.success("User deleted successfully");
-
-                  setIsDeleteDialogOpen(false);
-                  setSelectedUser(null);
-                }}
+                onConfirm={handleDeleteConfirm}
               />
             </>
           )}

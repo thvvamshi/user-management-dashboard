@@ -1,23 +1,32 @@
+import Header from "../components/Header";
+import SearchBar from "../components/SearchBar";
+import UserTable from "../components/UserTable";
 import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
-import UserTable from "../components/UserTable";
+
 import useUsers from "../hooks/useUsers";
 
 function Dashboard() {
-  const { users, loading, error } = useUsers();
+  const { users, filteredUsers, loading, error, searchQuery, setSearchQuery } =
+    useUsers();
 
   return (
-    <main className="dashboard">
-      <div className="container">
-        <h1>User Management Dashboard</h1>
+    <main className="min-h-screen bg-slate-100 py-10">
+      <div className="mx-auto max-w-7xl px-4">
+        <Header
+          totalUsers={users.length}
+          filteredUsers={filteredUsers.length}
+        />
 
-        <p>Manage users with search, filtering, sorting and CRUD operations.</p>
+        <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
-        {loading && <Loader />}
+          {loading && <Loader />}
 
-        {!loading && error && <ErrorState message={error} />}
+          {!loading && error && <ErrorState message={error} />}
 
-        {!loading && !error && <UserTable users={users} />}
+          {!loading && !error && <UserTable users={filteredUsers} />}
+        </div>
       </div>
     </main>
   );

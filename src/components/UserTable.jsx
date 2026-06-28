@@ -1,29 +1,43 @@
-import EmptyState from "./EmptyState";
 import UserRow from "./UserRow";
 
 function UserTable({ users }) {
-  if (users.length === 0) {
-    return <EmptyState />;
-  }
-
   return (
-    <table className="user-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Department</th>
-        </tr>
-      </thead>
+    <div className="mt-8 overflow-hidden rounded-xl border border-slate-200">
 
-      <tbody>
-        {users.map((user) => (
-          <UserRow key={user.id} user={user} />
-        ))}
-      </tbody>
-    </table>
+      <table className="w-full">
+
+        <thead className="bg-slate-100">
+
+          <tr>
+
+            <th className="px-6 py-4 text-left">ID</th>
+
+            <th className="px-6 py-4 text-left">Name</th>
+
+            <th className="px-6 py-4 text-left">Email</th>
+
+            <th className="px-6 py-4 text-left">Department</th>
+
+            <th className="px-6 py-4 text-center">Actions</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          {users.map((user) => (
+            <UserRow
+              key={user.id}
+              user={user}
+            />
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </div>
   );
 }
 

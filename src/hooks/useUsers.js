@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getUsers } from "../api/userService";
 import { mapUser } from "../utils/mapper";
 import { searchUsers } from "../utils/search";
+import { sortUsers } from "../utils/sort";
 
 function useUsers() {
   // Original API data
@@ -11,6 +12,10 @@ function useUsers() {
   // UI State
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // sort state
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // Search State
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,25 +40,24 @@ function useUsers() {
     }
   }
 
-  // Search
   const filteredUsers = useMemo(() => {
-    return searchUsers(users, searchQuery);
-  }, [users, searchQuery]);
+    let result = searchUsers(users, searchQuery);
 
+    result = sortUsers(result, sortBy, sortOrder);
+
+    return result;
+  }, [users, searchQuery, sortBy, sortOrder]);
   return {
-    // Data
     users,
     filteredUsers,
-
-    // UI State
     loading,
     error,
-
-    // Search
     searchQuery,
     setSearchQuery,
-
-    // Actions
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
     setUsers,
     refreshUsers: fetchUsers,
   };

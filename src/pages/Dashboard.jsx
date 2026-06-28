@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
 import UserForm from "../components/UserForm";
 import DeleteDialog from "../components/DeleteDialog";
+import toast from "react-hot-toast";
 
 import useUsers from "../hooks/useUsers";
 
@@ -120,6 +121,8 @@ function Dashboard() {
                 }}
                 onConfirm={() => {
                   deleteUser(selectedUser.id);
+
+                  toast.success("User deleted successfully");
 
                   setIsDeleteDialogOpen(false);
                   setSelectedUser(null);

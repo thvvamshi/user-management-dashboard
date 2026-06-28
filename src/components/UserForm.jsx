@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { DEPARTMENTS } from "../utils/constants";
 import { validateUser } from "../utils/validators";
+import toast from "react-hot-toast";
 
 function UserForm({ isOpen, onClose, editingUser, addUser, updateUser }) {
   const [values, setValues] = useState({
@@ -55,12 +56,17 @@ function UserForm({ isOpen, onClose, editingUser, addUser, updateUser }) {
         ...editingUser,
         ...values,
       });
+
+      toast.success("User updated successfully");
     } else {
       addUser(values);
+
+      toast.success("User added successfully");
     }
 
     onClose();
   }
+
   if (!isOpen) return null;
 
   return (

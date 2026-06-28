@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import UserTable from "../components/UserTable";
+import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
 
@@ -10,28 +11,43 @@ function Dashboard() {
   const {
     users,
     filteredUsers,
+    paginatedUsers,
+
     loading,
     error,
+
     searchQuery,
     setSearchQuery,
+
     department,
     setDepartment,
+
     sortBy,
     setSortBy,
+
     sortOrder,
     setSortOrder,
+
+    currentPage,
+    setCurrentPage,
+
+    pageSize,
+    setPageSize,
+
+    totalPages,
   } = useUsers();
 
   return (
     <main className="min-h-screen bg-slate-100 py-10">
       <div className="mx-auto max-w-7xl px-4">
+
         <Header
           totalUsers={users.length}
           filteredUsers={filteredUsers.length}
         />
 
         <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
-            
+
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
@@ -45,10 +61,26 @@ function Dashboard() {
 
           {loading && <Loader />}
 
-          {!loading && error && <ErrorState message={error} />}
+          {!loading && error && (
+            <ErrorState message={error} />
+          )}
 
-          {!loading && !error && <UserTable users={filteredUsers} />}
+          {!loading && !error && (
+            <>
+              <UserTable users={paginatedUsers} />
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+              />
+            </>
+          )}
+
         </div>
+
       </div>
     </main>
   );

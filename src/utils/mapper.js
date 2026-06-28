@@ -1,4 +1,4 @@
-import { DEFAULT_DEPARTMENT } from "./constants";
+import { DEPARTMENTS } from "./constants";
 
 export function mapUser(user) {
   const [firstName = "", ...rest] = user.name.split(" ");
@@ -9,10 +9,12 @@ export function mapUser(user) {
     lastName: rest.join(" "),
     email: user.email,
     phone: user.phone,
-    department: DEFAULT_DEPARTMENT,
     username: user.username,
     website: user.website,
     company: user.company?.name || "",
     city: user.address?.city || "",
+
+    // Assign departments cyclically
+    department: DEPARTMENTS[(user.id - 1) % DEPARTMENTS.length],
   };
 }

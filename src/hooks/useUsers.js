@@ -3,28 +3,33 @@ import { useEffect, useMemo, useState } from "react";
 import { getUsers } from "../api/userService";
 import { mapUser } from "../utils/mapper";
 import { searchUsers } from "../utils/search";
-import { sortUsers } from "../utils/sort";
 import { filterUsers } from "../utils/filter";
+import { sortUsers } from "../utils/sort";
+import { paginateUsers } from "../utils/pagination";
+import { DEFAULT_PAGE_SIZE } from "../utils/constants";
 
 function useUsers() {
-  // Original API data
+  // Data
   const [users, setUsers] = useState([]);
 
-  // UI State
+  // Loading
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  //    Filter state
+  // Search
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter
   const [department, setDepartment] = useState("All");
 
-  // sort state
+  // Sort
   const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  // Search State
-  const [searchQuery, setSearchQuery] = useState("");
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
-  // Fetch Users
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -44,6 +49,7 @@ function useUsers() {
     }
   }
 
+  // Search → Filter → Sort
   const filteredUsers = useMemo(() => {
     let result = searchUsers(users, searchQuery);
 
@@ -52,21 +58,65 @@ function useUsers() {
     result = sortUsers(result, sortBy, sortOrder);
 
     return result;
-  }, [users, searchQuery, department, sortBy, sortOrder]);
+  }, [
+    users,
+    searchQuery,
+    department,
+    sortBy,
+    sortOrder,
+  ]);
+
+  // Pagination
+  const paginatedUsers = useMemo(() => {
+    return paginateUsers(
+      filteredUsers,
+      currentPage,
+      pageSize
+    );
+  }, [
+    filteredUsers,
+    currentPage,
+    pageSize,
+  ]);
+
+  // Total Pages
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredUsers.length / pageSize)
+  );
 
   return {
+    // Data
     users,
     filteredUsers,
+    paginatedUsers,
+
+    // UI
     loading,
     error,
+
+    // Search
     searchQuery,
     setSearchQuery,
+
+    // Filter
     department,
     setDepartment,
+
+    // Sort
     sortBy,
     setSortBy,
     sortOrder,
     setSortOrder,
+
+    // Pagination
+    currentPage,
+    setCurrentPage,
+    pageSize,
+    setPageSize,
+    totalPages,
+
+    // Actions
     setUsers,
     refreshUsers: fetchUsers,
   };

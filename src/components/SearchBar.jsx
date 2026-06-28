@@ -13,7 +13,6 @@ function SearchBar({
 }) {
   return (
     <div className="mb-6 flex flex-col gap-4 lg:flex-row">
-
       <input
         type="text"
         placeholder="Search users..."
@@ -27,8 +26,13 @@ function SearchBar({
         onChange={(e) => setDepartment(e.target.value)}
         className="rounded-lg border border-slate-300 px-4 py-3"
       >
-        <option>All</option>
-        <option>Engineering</option>
+        <option value="All">All Departments</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Sales">Sales</option>
+        <option value="Finance">Finance</option>
+        <option value="HR">HR</option>
+        <option value="Support">Support</option>
       </select>
 
       <select
@@ -43,20 +47,11 @@ function SearchBar({
       </select>
 
       <button
-        onClick={() =>
-          setSortOrder(
-            sortOrder === "asc"
-              ? "desc"
-              : "asc"
-          )
-        }
+        onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
         className="rounded-lg bg-slate-800 px-5 py-3 text-white hover:bg-slate-900"
       >
-        {sortOrder === "asc"
-          ? "↑ ASC"
-          : "↓ DESC"}
+        {sortOrder === "asc" ? "↑ ASC" : "↓ DESC"}
       </button>
-
     </div>
   );
 }

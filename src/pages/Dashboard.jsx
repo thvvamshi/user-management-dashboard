@@ -1,24 +1,23 @@
+import Loader from "../components/Loader";
+import ErrorState from "../components/ErrorState";
+import UserTable from "../components/UserTable";
 import useUsers from "../hooks/useUsers";
 
 function Dashboard() {
   const { users, loading, error } = useUsers();
-
-  if (loading) {
-    return <h2>Loading users...</h2>;
-  }
-
-  if (error) {
-    return <h2>{error}</h2>;
-  }
 
   return (
     <main className="dashboard">
       <div className="container">
         <h1>User Management Dashboard</h1>
 
-        <p>Total Users: {users.length}</p>
+        <p>Manage users with search, filtering, sorting and CRUD operations.</p>
 
-        <pre>{JSON.stringify(users, null, 2)}</pre>
+        {loading && <Loader />}
+
+        {!loading && error && <ErrorState message={error} />}
+
+        {!loading && !error && <UserTable users={users} />}
       </div>
     </main>
   );

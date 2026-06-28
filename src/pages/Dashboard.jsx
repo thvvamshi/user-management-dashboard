@@ -14,11 +14,14 @@ function Dashboard() {
     error,
     searchQuery,
     setSearchQuery,
+    department,
+    setDepartment,
     sortBy,
     setSortBy,
     sortOrder,
     setSortOrder,
   } = useUsers();
+
   return (
     <main className="min-h-screen bg-slate-100 py-10">
       <div className="mx-auto max-w-7xl px-4">
@@ -28,14 +31,18 @@ function Dashboard() {
         />
 
         <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
+            
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
+            department={department}
+            setDepartment={setDepartment}
             sortBy={sortBy}
             setSortBy={setSortBy}
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
           />
+
           {loading && <Loader />}
 
           {!loading && error && <ErrorState message={error} />}

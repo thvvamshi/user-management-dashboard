@@ -1,13 +1,18 @@
 function SearchBar({
   value,
   onChange,
+
+  department,
+  setDepartment,
+
   sortBy,
   setSortBy,
+
   sortOrder,
   setSortOrder,
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 md:flex-row">
+    <div className="mb-6 flex flex-col gap-4 lg:flex-row">
 
       <input
         type="text"
@@ -16,6 +21,15 @@ function SearchBar({
         onChange={(e) => onChange(e.target.value)}
         className="flex-1 rounded-lg border border-slate-300 px-4 py-3 focus:border-blue-500 focus:outline-none"
       />
+
+      <select
+        value={department}
+        onChange={(e) => setDepartment(e.target.value)}
+        className="rounded-lg border border-slate-300 px-4 py-3"
+      >
+        <option>All</option>
+        <option>Engineering</option>
+      </select>
 
       <select
         value={sortBy}
@@ -36,7 +50,7 @@ function SearchBar({
               : "asc"
           )
         }
-        className="rounded-lg bg-slate-800 px-5 py-3 text-white"
+        className="rounded-lg bg-slate-800 px-5 py-3 text-white hover:bg-slate-900"
       >
         {sortOrder === "asc"
           ? "↑ ASC"

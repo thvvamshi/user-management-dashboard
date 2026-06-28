@@ -4,6 +4,7 @@ import { getUsers } from "../api/userService";
 import { mapUser } from "../utils/mapper";
 import { searchUsers } from "../utils/search";
 import { sortUsers } from "../utils/sort";
+import { filterUsers } from "../utils/filter";
 
 function useUsers() {
   // Original API data
@@ -12,6 +13,9 @@ function useUsers() {
   // UI State
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  //    Filter state
+  const [department, setDepartment] = useState("All");
 
   // sort state
   const [sortBy, setSortBy] = useState("");
@@ -43,10 +47,13 @@ function useUsers() {
   const filteredUsers = useMemo(() => {
     let result = searchUsers(users, searchQuery);
 
+    result = filterUsers(result, department);
+
     result = sortUsers(result, sortBy, sortOrder);
 
     return result;
-  }, [users, searchQuery, sortBy, sortOrder]);
+  }, [users, searchQuery, department, sortBy, sortOrder]);
+
   return {
     users,
     filteredUsers,
@@ -54,6 +61,8 @@ function useUsers() {
     error,
     searchQuery,
     setSearchQuery,
+    department,
+    setDepartment,
     sortBy,
     setSortBy,
     sortOrder,

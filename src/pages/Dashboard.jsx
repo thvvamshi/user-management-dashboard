@@ -81,8 +81,8 @@ function Dashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 py-10">
-      <div className="mx-auto max-w-7xl px-4">
+    <main className="min-h-screen bg-slate-100 py-4">
+      <div className="mx-auto max-w-[1450px] px-5">
         <Header
           totalUsers={users.length}
           filteredUsers={filteredUsers.length}
@@ -92,18 +92,19 @@ function Dashboard() {
           }}
         />
 
-        <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-            department={department}
-            setDepartment={setDepartment}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-          />
-
+        <section className="mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              department={department}
+              setDepartment={setDepartment}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+            />
+          </div>
           {loading && <Loader />}
 
           {!loading && error && <ErrorState message={error} />}
@@ -114,11 +115,15 @@ function Dashboard() {
                 <EmptyState onClearFilters={clearFilters} />
               ) : (
                 <>
+                  {/* Mobile */}
+
                   <MobileUserList
                     users={paginatedUsers}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                   />
+
+                  {/* Desktop */}
 
                   <UserTable
                     users={paginatedUsers}
@@ -126,13 +131,15 @@ function Dashboard() {
                     onDelete={handleDelete}
                   />
 
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    setCurrentPage={setCurrentPage}
-                    pageSize={pageSize}
-                    setPageSize={setPageSize}
-                  />
+                  <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      setCurrentPage={setCurrentPage}
+                      pageSize={pageSize}
+                      setPageSize={setPageSize}
+                    />
+                  </div>
                 </>
               )}
 
@@ -155,7 +162,7 @@ function Dashboard() {
               />
             </>
           )}
-        </div>
+        </section>
       </div>
     </main>
   );

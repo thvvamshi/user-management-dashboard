@@ -4,6 +4,7 @@ import UserTable from "../components/UserTable";
 import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
+import UserForm from "../components/UserForm";
 
 import useUsers from "../hooks/useUsers";
 
@@ -35,19 +36,27 @@ function Dashboard() {
     setPageSize,
 
     totalPages,
+
+    isFormOpen,
+    setIsFormOpen,
+
+    editingUser,
+    setEditingUser,
   } = useUsers();
 
   return (
     <main className="min-h-screen bg-slate-100 py-10">
       <div className="mx-auto max-w-7xl px-4">
-
         <Header
           totalUsers={users.length}
           filteredUsers={filteredUsers.length}
+          onAddUser={() => {
+            setEditingUser(null);
+            setIsFormOpen(true);
+          }}
         />
 
         <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
-
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
@@ -61,9 +70,7 @@ function Dashboard() {
 
           {loading && <Loader />}
 
-          {!loading && error && (
-            <ErrorState message={error} />
-          )}
+          {!loading && error && <ErrorState message={error} />}
 
           {!loading && !error && (
             <>
@@ -76,11 +83,14 @@ function Dashboard() {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
               />
+              <UserForm
+                isOpen={isFormOpen}
+                onClose={() => setIsFormOpen(false)}
+                editingUser={editingUser}
+              />
             </>
           )}
-
         </div>
-
       </div>
     </main>
   );

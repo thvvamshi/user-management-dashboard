@@ -30,6 +30,10 @@ function useUsers() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
+  // Modal State
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -58,32 +62,15 @@ function useUsers() {
     result = sortUsers(result, sortBy, sortOrder);
 
     return result;
-  }, [
-    users,
-    searchQuery,
-    department,
-    sortBy,
-    sortOrder,
-  ]);
+  }, [users, searchQuery, department, sortBy, sortOrder]);
 
   // Pagination
   const paginatedUsers = useMemo(() => {
-    return paginateUsers(
-      filteredUsers,
-      currentPage,
-      pageSize
-    );
-  }, [
-    filteredUsers,
-    currentPage,
-    pageSize,
-  ]);
+    return paginateUsers(filteredUsers, currentPage, pageSize);
+  }, [filteredUsers, currentPage, pageSize]);
 
   // Total Pages
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredUsers.length / pageSize)
-  );
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
 
   return {
     // Data
@@ -115,6 +102,13 @@ function useUsers() {
     pageSize,
     setPageSize,
     totalPages,
+
+    // Modal
+    isFormOpen,
+    setIsFormOpen,
+
+    editingUser,
+    setEditingUser,
 
     // Actions
     setUsers,

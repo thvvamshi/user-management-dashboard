@@ -6,6 +6,8 @@ import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
 import UserForm from "../components/UserForm";
 import DeleteDialog from "../components/DeleteDialog";
+import EmptyState from "../components/EmptyState";
+
 import toast from "react-hot-toast";
 
 import useUsers from "../hooks/useUsers";
@@ -22,6 +24,8 @@ function Dashboard() {
     addUser,
     updateUser,
     deleteUser,
+
+    clearFilters,
 
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
@@ -86,25 +90,32 @@ function Dashboard() {
 
           {!loading && !error && (
             <>
-              <UserTable
-                users={paginatedUsers}
-                onEdit={(user) => {
-                  setEditingUser(user);
-                  setIsFormOpen(true);
-                }}
-                onDelete={(user) => {
-                  setSelectedUser(user);
-                  setIsDeleteDialogOpen(true);
-                }}
-              />
+              {filteredUsers.length === 0 ? (
+                <EmptyState onClearFilters={clearFilters} />
+              ) : (
+                <>
+                  <UserTable
+                    users={paginatedUsers}
+                    onEdit={(user) => {
+                      setEditingUser(user);
+                      setIsFormOpen(true);
+                    }}
+                    onDelete={(user) => {
+                      setSelectedUser(user);
+                      setIsDeleteDialogOpen(true);
+                    }}
+                  />
 
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                setCurrentPage={setCurrentPage}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-              />
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                  />
+                </>
+              )}
+
               <UserForm
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
@@ -112,6 +123,7 @@ function Dashboard() {
                 addUser={addUser}
                 updateUser={updateUser}
               />
+
               <DeleteDialog
                 isOpen={isDeleteDialogOpen}
                 user={selectedUser}

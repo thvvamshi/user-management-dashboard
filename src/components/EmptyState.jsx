@@ -1,17 +1,30 @@
-function ErrorState({ message }) {
+function EmptyState({
+  onClearFilters,
+}) {
   return (
-    <div className="py-12 text-center">
+    <div className="flex flex-col items-center justify-center py-20">
 
-      <h2 className="text-xl font-semibold text-red-600">
-        Something went wrong
+      <div className="mb-6 text-6xl">
+        🔍
+      </div>
+
+      <h2 className="text-2xl font-semibold text-slate-800">
+        No users found
       </h2>
 
-      <p className="mt-2 text-slate-500">
-        {message}
+      <p className="mt-3 text-center text-slate-500">
+        Try changing your search or filters.
       </p>
+
+      <button
+        onClick={onClearFilters}
+        className="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
+      >
+        Clear Filters
+      </button>
 
     </div>
   );
 }
 
-export default ErrorState;
+export default EmptyState;

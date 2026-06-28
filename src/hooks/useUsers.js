@@ -68,6 +68,16 @@ function useUsers() {
     return result;
   }, [users, searchQuery, department, sortBy, sortOrder]);
 
+  //clear
+  function clearFilters() {
+    setSearchQuery("");
+    setDepartment("All");
+    setSortBy("");
+    setSortOrder("asc");
+
+    setCurrentPage(1);
+  }
+
   // Pagination
   const paginatedUsers = useMemo(() => {
     return paginateUsers(filteredUsers, currentPage, pageSize);
@@ -147,6 +157,8 @@ function useUsers() {
 
     selectedUser,
     setSelectedUser,
+
+    clearFilters,
 
     // Actions
     setUsers,

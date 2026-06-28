@@ -34,6 +34,10 @@ function useUsers() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
 
+  // Delete state
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -72,6 +76,29 @@ function useUsers() {
   // Total Pages
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
 
+  function addUser(newUser) {
+    const nextId =
+      users.length > 0 ? Math.max(...users.map((user) => user.id)) + 1 : 1;
+
+    setUsers((prev) => [
+      {
+        id: nextId,
+        ...newUser,
+      },
+      ...prev,
+    ]);
+  }
+
+  function updateUser(updatedUser) {
+    setUsers((prev) =>
+      prev.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
+    );
+  }
+
+  function deleteUser(userId) {
+    setUsers((prev) => prev.filter((user) => user.id !== userId));
+  }
+
   return {
     // Data
     users,
@@ -106,9 +133,20 @@ function useUsers() {
     // Modal
     isFormOpen,
     setIsFormOpen,
-
     editingUser,
     setEditingUser,
+
+    // CRUD
+    addUser,
+    updateUser,
+    deleteUser,
+
+    // Delete
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+
+    selectedUser,
+    setSelectedUser,
 
     // Actions
     setUsers,

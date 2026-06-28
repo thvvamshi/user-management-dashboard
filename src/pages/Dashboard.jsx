@@ -5,6 +5,7 @@ import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import ErrorState from "../components/ErrorState";
 import UserForm from "../components/UserForm";
+import DeleteDialog from "../components/DeleteDialog";
 
 import useUsers from "../hooks/useUsers";
 
@@ -16,6 +17,16 @@ function Dashboard() {
 
     loading,
     error,
+
+    addUser,
+    updateUser,
+    deleteUser,
+
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+
+    selectedUser,
+    setSelectedUser,
 
     searchQuery,
     setSearchQuery,
@@ -74,7 +85,17 @@ function Dashboard() {
 
           {!loading && !error && (
             <>
-              <UserTable users={paginatedUsers} />
+              <UserTable
+                users={paginatedUsers}
+                onEdit={(user) => {
+                  setEditingUser(user);
+                  setIsFormOpen(true);
+                }}
+                onDelete={(user) => {
+                  setSelectedUser(user);
+                  setIsDeleteDialogOpen(true);
+                }}
+              />
 
               <Pagination
                 currentPage={currentPage}
@@ -87,6 +108,22 @@ function Dashboard() {
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
                 editingUser={editingUser}
+                addUser={addUser}
+                updateUser={updateUser}
+              />
+              <DeleteDialog
+                isOpen={isDeleteDialogOpen}
+                user={selectedUser}
+                onClose={() => {
+                  setIsDeleteDialogOpen(false);
+                  setSelectedUser(null);
+                }}
+                onConfirm={() => {
+                  deleteUser(selectedUser.id);
+
+                  setIsDeleteDialogOpen(false);
+                  setSelectedUser(null);
+                }}
               />
             </>
           )}
